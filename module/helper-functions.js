@@ -34,8 +34,6 @@ export class fblPool extends DicePool {
       // const r3 = new Roll(`${nGear}d6`);
       const allRolls = [r1, r2, r3].concat(nArtifact.map( d => {return new Roll(d)}));
       let r = super({rolls: allRolls}).evaluate();
-      console.log(nAttribute, nSkill, nGear, nArtifact);
-      console.log(allRolls, r);
 
       if (nSkill < 0) this.isSkillNegative = true;
       
@@ -48,8 +46,7 @@ export class fblPool extends DicePool {
       this.artifactArray = nArtifact;
 
       this.originalRoll = r.rolls.map( d => {
-        if(!d) return [];
-        return d.terms[0].values;
+        return !d ? [] : d.terms[0].values;
       });
     //   console.log(this.originalRoll);
 
@@ -140,15 +137,14 @@ export async function prepareRollData( rollType, actor, id) {
 
   //-------------- Equipment or Weapon ------------------------------
   if ( rollType==="Weapon" || rollType==="Equipment") {
-    console.log(actor.data);
-    // const item = actor.getEmbeddedEntity("OwnedItem", id);
-    const item = actor.data.items.find( i => i._id === id); 
+    // const item = actor.getEmbeddedEntity("OwnedItem", id); <----- Why doesn't this work?
+    const item = actor.data.items.find( i => i._id === id);
     if (item.data.skill === "None") {console.log("This Item can't be used in a check"); return null};
     const skill = item.data.skill;
     const attribute = actor.data.data.skills[item.data.skill].attr;
     const itemName = item.name;
     const gearDice = item.data.bonus.currentValue;
-    console.log("gear Dice: ", item);
+    // console.log("gear Dice: ", item);
     let artifactDie = (item.data.isArtifact) ? [item.data.artifactDie] : [];
     let skillDice = actor.data.data.skills[item.data.skill].value;
     const attributeDice = actor.data.data.attributes[attribute].value;

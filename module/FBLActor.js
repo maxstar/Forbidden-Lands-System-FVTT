@@ -42,16 +42,10 @@ export class FBLActor extends Actor {
 
     prepareEmbeddedEntities() { 
         super.prepareEmbeddedEntities();
-        Object.values(this.data.items).forEach( item => {
-            // if the item doesn't have a bonus property, return
-            if (!item.data.bonus) return;
-            item.data.bonus.currentValue = item.data.bonus.value - item.data.bonus.damage;
-            // console.log("item current bonus", item.data.bonus.currentValue);
-        })
         // filter the embedded entities "items" array by type of embedded entities and
         // sort them into appropriate new arrays for ease of access
         this._prepareEmbeddedArrays();
-        return this.data;
+        // console.log(this);
     }
 
     prepareDerivedData() {
@@ -90,23 +84,23 @@ export class FBLActor extends Actor {
 
     _prepareEmbeddedArrays() {
         //  if no entities are embedded, initialize the arrays and return
-        if (!this.data.items) {
-            this.data.data.Weapon = [];
-            this.data.data.Armor = [];
-            this.data.data.Equipment = [];
-            this.data.data.MountInventory = [];
-            this.data.data["Critical Injury"] = [];
-            this.data.data.Talent = [];
-            this.data.data.Spell = [];
-            return;
-        }        
+        // if (!this.data.items) {
+        //     this.data.data.Weapon = [];
+        //     this.data.data.Armor = [];
+        //     this.data.data.Equipment = [];
+        //     this.data.data.MountInventory = [];
+        //     this.data.data["Critical Injury"] = [];
+        //     this.data.data.Talent = [];
+        //     this.data.data.Spell = [];
+        //     return;
+        // }        
         // for each type of embeddedEntity allowed for this type of actor, create the array
         // this.data.data[entityType], fill it with embeddedEntities of that
         // specific type for ease of access and then sort it according to the sort parameter
         this.validEmbeddedEntities?.forEach( entityType => {
-            this.data.data[entityType] = this.data.items.filter( (item) => item.type === entityType).sort( (item1, item2) => {
+            this.data.data[entityType] = this.data.items ? this.data.items.filter( (item) => item.type === entityType).sort( (item1, item2) => {
                 return (item1.sort - item2.sort);
-            });
+            }) : [] ;
         });
         // console.log(this.data.data.Equipment);
         }
@@ -170,7 +164,7 @@ export class FBLActor extends Actor {
         data.mountEncumbrance = {};
         data.mountEncumbrance.value = itemsMountWeight;
         data.mountEncumbrance.capacity = this.data.flags?.forbiddenlands?.mount?.strength * 4 || 0;
-        console.log(this.data);
+        // console.log(this.data);
     }
 
     _prepareDerivedNPCData() {}

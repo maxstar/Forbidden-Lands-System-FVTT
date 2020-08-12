@@ -32,6 +32,7 @@ Hooks.once("init", async function() {
   CONFIG.ChatMessage.entityClass = FBLChatMessage;
   // CONFIG.debug.hooks = true;
   CONFIG.ui.combat = FBLCombatTracker;
+  CONFIG.Combat.initiative.decimals = 0;
   Combat.prototype.rollAll = rollAll;
   Combat.prototype.setupTurns = setupTurns;
   Combat.prototype.rollInitiative = rollInitiative;

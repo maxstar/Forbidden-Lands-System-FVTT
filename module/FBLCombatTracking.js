@@ -329,7 +329,7 @@ export const rollInitiative = async function (combatant, cardsArray, isOverflowi
     let dieFaces = cardsArray.length - i;
     if (dieFaces <= 0) break;
     let die = new Die(dieFaces);
-    let res = die.roll().results[0];
+    let res = new Roll(`1d${dieFaces}`).roll().terms[0].values[0];
     draw = draw.concat(cardsArray.splice(res - 1, 1));
   }
   // console.log(draw)
