@@ -221,19 +221,21 @@ Hooks.on("hotbarDrop", async function (hotbar, dropData, slot) {
 let _onUpdateTokenActor = function _onUpdateTokenActor(updateData) {
   // Reject any calls which were incorrectly placed to this method for tokens which are linked
   if ( !this.actor || this.data.actorLink ) return;
+
   // Update data for the synthetic Token
-  mergeObject(this.actor.data, updateData);
+  mergeObject(this.actor._data, updateData);
   this.actor._onUpdate(updateData);
+
   // Update Token bar attributes
   this._onUpdateBarAttributes(updateData);
+
   // Update tracked Combat resources
   const checkProperty = (game.combats.settings.resource.includes("attributes")) ? true : hasProperty(updateData.data, game.combats.settings.resource);
-
   if ( this.inCombat && updateData.data && checkProperty ) {
-    console.log("_onUpdateTokenActor Fired");
     canvas.addPendingOperation(`CombatTracker.updateTrackedResources`, ui.combat.updateTrackedResources, ui.combat);
     canvas.addPendingOperation(`CombatTracker.render`, ui.combat.render, ui.combat);
   }
+
   // Render the active Token sheet
   this.actor.sheet.render();
 }
@@ -255,6 +257,6 @@ let _onUpdateBaseActor = function _onUpdateBaseActor(actorData, updateData) {
     ui.combat.render();
   }
   // Render the active Token sheet
+  console.log("_onUpdateBaseActor Fired");
   this.actor.sheet.render();
-
 }

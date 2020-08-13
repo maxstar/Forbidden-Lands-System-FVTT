@@ -489,15 +489,15 @@ function createDieTrack(modifier) {
     const oldValue = getProperty(obj, property);
     // if the newValue equals the old one then reset the damage to zero (the player needs a way to reset the damage when his character is completely healed)
     // otherwise keep the newValue
-      newValue =  (newValue === oldValue) ? 0 : newValue;
+    newValue =  (newValue === oldValue) ? 0 : newValue;
     // prepare the target property for the update
     let newData = updateDataFromProperty(property, newValue);
-      if (id) {
-        newData = mergeObject( {"_id": id}, newData);
-        await this.actor.updateEmbeddedEntity("OwnedItem", newData);
-        this.actor.prepareEmbeddedEntities();
-      }
-      else { await this.actor.update(newData) }
+    if (id) {
+      newData = mergeObject( {"_id": id}, newData);
+      await this.actor.updateEmbeddedEntity("OwnedItem", newData);
+      this.actor.prepareEmbeddedEntities();
+    }
+    else { await this.actor.update(newData) }
   }
 
 
